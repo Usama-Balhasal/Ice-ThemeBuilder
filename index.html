@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IceThemeBuilder - Professional Color Tool</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Professional color theory tool for generating harmonious color palettes with advanced accessibility features" />
+</head>
+<body class="light">
+
+  <header role="banner">
+    <div class="header-content">
+      <h1>❄ IceThemeBuilder Pro</h1>
+      <br>
+    </div>
+    <div class="header-actions">
+      <nav class="main-navigation" role="navigation" aria-label="Main navigation">
+        <a href="index.html" class="nav-link active" title="Home">
+          🏠 Home
+        </a>
+        <a href="aboutme.html" class="nav-link" title="About Me">
+          👤 About Me
+        </a>
+      </nav>
+      <button id="toggleMode" aria-label="Toggle between dark and light mode" title="Toggle Dark / Light Mode">
+        🌙 Toggle Theme
+      </button>
+    </div>
+  </header>
+
+  <main role="main">
+    <!-- Enhanced Controls Section -->
+    <section class="controls" aria-labelledby="controls-title">
+      <h2 id="controls-title">Color Controls</h2>
+      
+      <div class="control-group">
+        <div class="control-item">
+          <label for="baseColor">Base Color:</label>
+          <div class="color-input-group">
+            <input type="color" id="baseColor" value="#4da6ff" aria-describedby="colorHelp">
+            <input type="text" id="baseColorText" value="#4da6ff" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" aria-label="Base color hex value">
+          </div>
+          <small id="colorHelp">Choose your primary brand color</small>
+        </div>
+
+        <div class="control-item">
+          <label for="harmonyType">Color Harmony:</label>
+          <select id="harmonyType" aria-label="Select color harmony type">
+            <option value="monochromatic">Monochromatic</option>
+            <option value="complementary">Complementary</option>
+            <option value="analogous">Analogous</option>
+            <option value="triadic">Triadic</option>
+            <option value="splitComplementary">Split Complementary</option>
+            <option value="tetradic">Tetradic</option>
+          </select>
+        </div>
+
+        <div class="control-item">
+          <label for="presetColors">Color Presets:</label>
+          <select id="presetColors" aria-label="Select from predefined color palettes">
+            <option value="">Choose Preset...</option>
+            <optgroup label="Material Design">
+              <option value="material-blue">Material Blue</option>
+              <option value="material-red">Material Red</option>
+              <option value="material-green">Material Green</option>
+              <option value="material-purple">Material Purple</option>
+              <option value="material-orange">Material Orange</option>
+            </optgroup>
+            <optgroup label="Bootstrap">
+              <option value="bootstrap-primary">Bootstrap Primary</option>
+              <option value="bootstrap-success">Bootstrap Success</option>
+              <option value="bootstrap-warning">Bootstrap Warning</option>
+              <option value="bootstrap-danger">Bootstrap Danger</option>
+            </optgroup>
+            <optgroup label="Tailwind">
+              <option value="tailwind-blue">Tailwind Blue</option>
+              <option value="tailwind-green">Tailwind Green</option>
+              <option value="tailwind-purple">Tailwind Purple</option>
+              <option value="tailwind-pink">Tailwind Pink</option>
+              <option value="tailwind-orange">Tailwind Orange</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="control-item">
+          <label for="colorFormat">Display Format:</label>
+          <select id="colorFormat" aria-label="Select color display format">
+            <option value="hex">HEX</option>
+            <option value="rgb">RGB</option>
+            <option value="hsl">HSL</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button id="exportCSS" class="primary" aria-label="Export theme to CSS">📤 Export Theme</button>
+        <button id="saveTheme" aria-label="Save current theme">💾 Save Theme</button>
+        <button id="resetPalette" aria-label="Reset to default palette">🔄 Reset</button>
+      </div>
+    </section>
+
+    <!-- Enhanced Color Wheel -->
+    <section class="colorwheel-section" aria-labelledby="colorwheel-title">
+      <h2 id="colorwheel-title">🎨 Interactive Color Wheel</h2>
+      <div class="colorwheel-container">
+        <div class="colorwheel-wrapper">
+          <canvas id="colorWheel" width="300" height="300" aria-label="Interactive color wheel for selecting base colors"></canvas>
+          <div class="colorwheel-controls">
+            <label for="wheelLightness">Lightness:</label>
+            <input type="range" id="wheelLightness" min="0" max="100" value="50" aria-label="Adjust color wheel lightness">
+            <label for="wheelSaturation">Saturation:</label>
+            <input type="range" id="wheelSaturation" min="0" max="100" value="100" aria-label="Adjust color wheel saturation">
+          </div>
+        </div>
+        <div class="colorwheel-info">
+          <div class="selected-color-display">
+            <div id="selectedColorPreview" class="color-preview"></div>
+            <div class="color-details">
+              <h3>Selected Color</h3>
+              <p><strong>HEX:</strong> <span id="selectedColorHex">#4da6ff</span></p>
+              <p><strong>HSL:</strong> <span id="selectedColorHsl">hsl(210, 100%, 70%)</span></p>
+              <p><strong>RGB:</strong> <span id="selectedColorRgb">rgb(77, 166, 255)</span></p>
+            </div>
+          </div>
+          <div class="harmony-preview">
+            <h3>Harmony Preview</h3>
+            <div id="harmonyColors" class="harmony-colors"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced Palette Display -->
+    <section class="palette-section" aria-labelledby="palette-title">
+      <h2 id="palette-title">Generated Color Palette</h2>
+      <div class="palette-info">
+        <p>Based on <span id="harmonyInfo">monochromatic</span> harmony • <span id="colorCount">5</span> colors generated</p>
+      </div>
+      <div class="palette" id="palette" role="list" aria-label="Color palette display"></div>
+    </section>
+
+    <!-- Brand Color Analysis from Images -->
+    <section class="brand-analysis-section" aria-labelledby="brand-analysis-title">
+      <h2 id="brand-analysis-title">🎨 Brand Color Analysis</h2>
+      
+      <div class="brand-analysis-container">
+        <div class="upload-section">
+          <h3>Upload Brand Image</h3>
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21,15 16,10 5,21"/>
+              </svg>
+              <p>Drop your brand image here or click to upload</p>
+              <p class="upload-formats">Supports JPG, PNG, GIF up to 10MB</p>
+            </div>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+          </div>
+          
+          <div class="analysis-options">
+            <div class="option-group">
+              <label for="colorExtractionMethod">Color Extraction Method:</label>
+              <select id="colorExtractionMethod" aria-label="Select color extraction method">
+                <option value="dominant">Dominant Colors</option>
+                <option value="balanced">Balanced Palette</option>
+                <option value="vibrant">Vibrant Colors</option>
+                <option value="neutral">Neutral Tones</option>
+              </select>
+            </div>
+            
+            <div class="option-group">
+              <label for="maxColors">Number of Colors:</label>
+              <input type="range" id="maxColors" min="3" max="12" value="5" aria-label="Number of colors to extract">
+              <span id="maxColorsValue">5 colors</span>
+            </div>
+            
+            <div class="option-group">
+              <label>
+                <input type="checkbox" id="includeNeutrals" checked aria-label="Include neutral colors">
+                Include Neutral Colors
+              </label>
+            </div>
+          </div>
+          
+          <button id="analyzeImage" class="primary" aria-label="Analyze image for brand colors" disabled>🔍 Analyze Image</button>
+        </div>
+        
+        <div class="analysis-results" id="analysisResults" style="display: none;">
+          <div class="image-preview">
+            <h4>Uploaded Image</h4>
+            <img id="previewImage" alt="Brand image preview">
+          </div>
+          
+          <div class="extracted-colors">
+            <h4>Extracted Color Palette</h4>
+            <div id="extractedColors" class="extracted-palette"></div>
+          </div>
+          
+          <div class="color-analysis">
+            <h4>Color Analysis</h4>
+            <div class="analysis-metrics">
+              <div class="metric">
+                <span class="metric-label">Brand Temperature</span>
+                <span class="metric-value" id="brandTemperature">-</span>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Color Harmony</span>
+                <span class="metric-value" id="colorHarmony">-</span>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Vibrancy Level</span>
+                <span class="metric-value" id="vibrancyLevel">-</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="brand-recommendations">
+            <h4>Brand Recommendations</h4>
+            <div id="brandRecommendations" class="recommendations-list"></div>
+          </div>
+          
+          <div class="analysis-actions">
+            <button id="applyBrandColors" class="primary">✨ Apply as Brand Colors</button>
+            <button id="saveBrandAnalysis">💾 Save Analysis</button>
+            <button id="exportBrandPalette">📤 Export Palette</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Collaboration & Sharing Features -->
+    <section class="collaboration-section" aria-labelledby="collaboration-title">
+      <h2 id="collaboration-title">🤝 Collaboration & Sharing</h2>
+      
+      <div class="collaboration-container">
+        <div class="sharing-options">
+          <h3>Share Your Palette</h3>
+          <div class="share-methods">
+            <div class="share-option">
+              <h4>Generate Share Link</h4>
+              <p>Create a shareable link with your current palette and settings</p>
+              <button id="generateShareLink" class="primary">🔗 Generate Link</button>
+              <div id="shareLinkResult" class="share-result" style="display: none;">
+                <input type="text" id="shareLinkInput" readonly aria-label="Generated share link">
+                <button id="copyShareLink">📋 Copy</button>
+              </div>
+            </div>
+            
+            <div class="share-option">
+              <h4>Export as Image</h4>
+              <p>Generate a beautiful image of your color palette</p>
+              <button id="exportPaletteImage">🖼️ Export Image</button>
+            </div>
+            
+            <div class="share-option">
+              <h4>Social Media</h4>
+              <p>Share directly to your favorite platforms</p>
+              <div class="social-buttons">
+                <button id="shareToTwitter">🐦 Twitter</button>
+                <button id="shareToLinkedIn">💼 LinkedIn</button>
+                <button id="shareToPinterest">📌 Pinterest</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="community-features">
+          <h3>Community & Inspiration</h3>
+          <div class="community-options">
+            <div class="community-option">
+              <h4>Palette Gallery</h4>
+              <p>Browse curated color palettes from designers worldwide</p>
+              <button id="browseGallery">🌟 Browse Gallery</button>
+            </div>
+            
+            <div class="community-option">
+              <h4>Submit to Gallery</h4>
+              <p>Share your created palette with the community</p>
+              <button id="submitToGallery">✨ Submit Palette</button>
+            </div>
+            
+            <div class="community-option">
+              <h4>Trending Colors</h4>
+              <p>See what colors are trending right now</p>
+              <button id="viewTrending">🔥 View Trending</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="collaboration-stats">
+        <h3>Community Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number" id="totalPalettes">-</span>
+            <span class="stat-label">Palettes Created</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="totalShares">-</span>
+            <span class="stat-label">Palettes Shared</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="communitySize">-</span>
+            <span class="stat-label">Active Users</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="todayPalettes">-</span>
+            <span class="stat-label">Created Today</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI-Powered Color Suggestions -->
+    <section class="ai-suggestions-section" aria-labelledby="ai-suggestions-title">
+      <h2 id="ai-suggestions-title">🤖 AI-Powered Color Intelligence</h2>
+      
+      <div class="ai-suggestions-container">
+        <div class="ai-controls">
+          <h3>Context Analysis</h3>
+          <div class="ai-options">
+            <div class="option-group">
+              <label for="projectType">Project Type:</label>
+              <select id="projectType" aria-label="Select project type">
+                <option value="corporate">Corporate & Business</option>
+                <option value="ecommerce">E-commerce & Retail</option>
+                <option value="healthcare">Healthcare & Medical</option>
+                <option value="education">Education & Learning</option>
+                <option value="creative">Creative & Arts</option>
+                <option value="technology">Technology & Software</option>
+                <option value="food">Food & Hospitality</option>
+                <option value="fashion">Fashion & Lifestyle</option>
+                <option value="realestate">Real Estate</option>
+                <option value="nonprofit">Non-profit & Social</option>
+              </select>
+            </div>
+            
+            <div class="option-group">
+              <label for="targetAudience">Target Audience:</label>
+              <select id="targetAudience" aria-label="Select target audience">
+                <option value="professionals">Business Professionals</option>
+                <option value="millennials">Millennials (25-40)</option>
+                <option value="genz">Gen Z (18-25)</option>
+                <option value="families">Families & Parents</option>
+                <option value="seniors">Seniors (65+)</option>
+                <option value="children">Children & Teens</option>
+                <option value="luxury">Luxury Market</option>
+                <option value="budget">Budget-Conscious</option>
+                <option value="global">Global Audience</option>
+              </select>
+            </div>
+            
+            <div class="option-group">
+              <label for="brandPersonality">Brand Personality:</label>
+              <select id="brandPersonality" aria-label="Select brand personality">
+                <option value="trustworthy">Trustworthy & Reliable</option>
+                <option value="innovative">Innovative & Cutting-edge</option>
+                <option value="friendly">Friendly & Approachable</option>
+                <option value="luxury">Luxury & Premium</option>
+                <option value="playful">Playful & Creative</option>
+                <option value="professional">Professional & Corporate</option>
+                <option value="caring">Caring & Supportive</option>
+                <option value="bold">Bold & Energetic</option>
+                <option value="minimalist">Minimalist & Clean</option>
+              </select>
+            </div>
+            
+            <div class="option-group">
+              <label for="emotionGoal">Emotional Goal:</label>
+              <select id="emotionGoal" aria-label="Select emotional goal">
+                <option value="confidence">Build Confidence</option>
+                <option value="excitement">Create Excitement</option>
+                <option value="calmness">Promote Calmness</option>
+                <option value="urgency">Create Urgency</option>
+                <option value="trust">Establish Trust</option>
+                <option value="joy">Inspire Joy</option>
+                <option value="sophistication">Convey Sophistication</option>
+                <option value="energy">Boost Energy</option>
+              </select>
+            </div>
+          </div>
+          
+          <button id="generateAISuggestions" class="primary" aria-label="Generate AI color suggestions">🧠 Generate Suggestions</button>
+        </div>
+        
+        <div class="ai-results" id="aiResults" style="display: none;">
+          <h3>AI-Generated Recommendations</h3>
+          <div class="suggestion-categories">
+            <div class="category">
+              <h4>Recommended Palettes</h4>
+              <div id="recommendedPalettes" class="ai-palettes"></div>
+            </div>
+            
+            <div class="category">
+              <h4>Color Psychology Insights</h4>
+              <div id="psychologyInsights" class="insights-list"></div>
+            </div>
+            
+            <div class="category">
+              <h4>Cultural Considerations</h4>
+              <div id="culturalInsights" class="insights-list"></div>
+            </div>
+            
+            <div class="category">
+              <h4>Accessibility Recommendations</h4>
+              <div id="accessibilityRecommendations" class="insights-list"></div>
+            </div>
+          </div>
+          
+          <div class="ai-actions">
+            <button id="applyBestSuggestion" class="primary">✨ Apply Best Match</button>
+            <button id="saveAISuggestions">💾 Save Suggestions</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Palette Optimization Engine -->
+    <section class="optimization-section" aria-labelledby="optimization-title">
+      <h2 id="optimization-title">🚀 Palette Optimization Engine</h2>
+      
+      <div class="optimization-container">
+        <div class="optimization-controls">
+          <h3>Optimization Settings</h3>
+          <div class="optimization-options">
+            <div class="option-group">
+              <label for="optimizationTarget">Target Use:</label>
+              <select id="optimizationTarget" aria-label="Select optimization target">
+                <option value="web">Web & Digital</option>
+                <option value="print">Print & Publishing</option>
+                <option value="mobile">Mobile Apps</option>
+                <option value="corporate">Corporate Branding</option>
+                <option value="accessibility">Maximum Accessibility</option>
+                <option value="creative">Creative Projects</option>
+              </select>
+            </div>
+            
+            <div class="option-group">
+              <label for="contrastRequirement">Minimum Contrast:</label>
+              <select id="contrastRequirement" aria-label="Select minimum contrast requirement">
+                <option value="4.5">WCAG AA (4.5:1)</option>
+                <option value="7">WCAG AAA (7:1)</option>
+                <option value="3">Large Text Only (3:1)</option>
+                <option value="custom">Custom...</option>
+              </select>
+            </div>
+            
+            <div class="option-group">
+              <label for="colorCount">Max Colors:</label>
+              <input type="number" id="colorCount" min="3" max="12" value="5" aria-label="Maximum number of colors">
+            </div>
+            
+            <div class="option-group">
+              <label>
+                <input type="checkbox" id="maintainHarmony" checked aria-label="Maintain color harmony">
+                Maintain Color Harmony
+              </label>
+            </div>
+            
+            <div class="option-group">
+              <label>
+                <input type="checkbox" id="ensureBrandConsistency" checked aria-label="Ensure brand consistency">
+                Ensure Brand Consistency
+              </label>
+            </div>
+          </div>
+          
+          <button id="optimizePalette" class="primary" aria-label="Optimize current palette">⚡ Optimize Palette</button>
+        </div>
+        
+        <div class="optimization-results" id="optimizationResults" style="display: none;">
+          <h3>Optimization Results</h3>
+          <div class="optimization-summary">
+            <div class="metric">
+              <span class="metric-label">Accessibility Score:</span>
+              <span class="metric-value" id="accessibilityScore">-</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Harmony Score:</span>
+              <span class="metric-value" id="harmonyScore">-</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Versatility Score:</span>
+              <span class="metric-value" id="versatilityScore">-</span>
+            </div>
+          </div>
+          
+          <div class="optimized-palette">
+            <h4>Optimized Palette</h4>
+            <div id="optimizedColors" class="palette"></div>
+          </div>
+          
+          <div class="optimization-recommendations">
+            <h4>Recommendations</h4>
+            <ul id="optimizationRecommendations"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced WCAG Contrast Check -->
+    <section class="contrast-section" aria-labelledby="contrast-title">
+      <h2 id="contrast-title">🔍 WCAG Accessibility Analysis</h2>
+      
+      <div class="contrast-samples">
+        <div class="sample-group">
+          <h3>Text on Background</h3>
+          <div class="contrast-box" id="contrastBox" role="region" aria-label="Contrast sample">
+            Sample Text - Aa Bb Cc 123
+          </div>
+          <div class="contrast-info" id="contrastInfo">
+            <div id="contrastResult"></div>
+          </div>
+        </div>
+
+        <div class="sample-group">
+          <h3>Large Text Test</h3>
+          <div class="contrast-box large-text" id="contrastBoxLarge">
+            Large Text Sample
+          </div>
+          <div class="contrast-info" id="contrastInfoLarge"></div>
+        </div>
+
+        <div class="sample-group">
+          <h3>UI Elements</h3>
+          <div class="contrast-box ui-sample" id="contrastBoxUI">
+            <button class="ui-button">Button Sample</button>
+            <input type="text" placeholder="Input Field" class="ui-input">
+          </div>
+          <div class="contrast-info" id="contrastInfoUI"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Color History & Favorites -->
+    <section class="history-section" aria-labelledby="history-title">
+      <h2 id="history-title">Color History & Favorites</h2>
+      
+      <div class="history-container">
+        <div class="history-panel">
+          <h3>Recent Colors</h3>
+          <div class="color-history" id="colorHistory" role="list"></div>
+        </div>
+        
+        <div class="favorites-panel">
+          <h3>Favorite Colors</h3>
+          <div class="color-favorites" id="colorFavorites" role="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Saved Themes -->
+    <section class="themes-section" aria-labelledby="themes-title">
+      <h2 id="themes-title">Saved Themes</h2>
+      <div class="themes-container" id="themesContainer">
+        <!-- Saved themes will be populated here -->
+      </div>
+    </section>
+
+    <!-- Accessibility Info -->
+    <section class="accessibility-section" aria-labelledby="accessibility-title">
+      <h2 id="accessibility-title">♿ Accessibility Features</h2>
+      
+      <div class="accessibility-info">
+        <div class="feature">
+          <h3>WCAG Compliance</h3>
+          <p>All color combinations are tested against WCAG 2.1 guidelines for both normal and large text.</p>
+        </div>
+        
+        <div class="feature">
+          <h3>Color Blind Simulation</h3>
+          <p>Visualize how your colors appear to users with different types of color blindness.</p>
+          <div class="colorblind-controls">
+            <label for="colorblindType">Type:</label>
+            <select id="colorblindType" aria-label="Select color blindness type">
+              <option value="none">Normal Vision</option>
+              <option value="protanopia">Protanopia (Red-blind)</option>
+              <option value="deuteranopia">Deuteranopia (Green-blind)</option>
+              <option value="tritanopia">Tritanopia (Blue-blind)</option>
+              <option value="achromatopsia">Achromatopsia (Complete color blindness)</option>
+              <option value="protanomaly">Protanomaly (Red-weak)</option>
+              <option value="deuteranomaly">Deuteranomaly (Green-weak)</option>
+              <option value="tritanomaly">Tritanomaly (Blue-weak)</option>
+            </select>
+            <button id="simulateColorBlindness" aria-label="Toggle color blindness simulation">👁️ Simulate</button>
+          </div>
+          <div class="colorblind-comparison" id="colorblindComparison" style="display: none;">
+            <div class="comparison-view">
+              <h4>Normal Vision</h4>
+              <div class="comparison-palette" id="normalPalette"></div>
+            </div>
+            <div class="comparison-view">
+              <h4>Color Blind Vision</h4>
+              <div class="comparison-palette" id="colorblindPalette"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature">
+          <h3>Keyboard Navigation</h3>
+          <p>Full keyboard support with proper focus indicators and ARIA labels.</p>
+        </div>
+        
+        <div class="feature">
+          <h3>Screen Reader Support</h3>
+          <p>Comprehensive ARIA labels and semantic HTML for assistive technologies.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notifications -->
+  <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Export Modal (Hidden by default) -->
+  <div id="exportModal" class="modal" role="dialog" aria-labelledby="exportModalTitle" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="exportModalTitle">Export Theme</h2>
+        <button class="close-modal" aria-label="Close export modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="export-options">
+          <fieldset>
+            <legend>Choose Export Format</legend>
+            <label>
+              <input type="radio" name="exportFormat" value="css" checked>
+              <span>CSS Variables</span>
+            </label>
+            <label>
+              <input type="radio" name="exportFormat" value="scss">
+              <span>SCSS Variables</span>
+            </label>
+            <label>
+              <input type="radio" name="exportFormat" value="json">
+              <span>JSON Design Tokens</span>
+            </label>
+            <label>
+              <input type="radio" name="exportFormat" value="tailwind">
+              <span>Tailwind Config</span>
+            </label>
+            <label>
+              <input type="radio" name="exportFormat" value="styleDictionary">
+              <span>Style Dictionary</span>
+            </label>
+            <label>
+              <input type="radio" name="exportFormat" value="android">
+              <span>Android XML</span>
+            </label>
+            <label>
+              <input type="radio" name="exportFormat" value="ios">
+              <span>iOS Swift</span>
+            </label>
+            <label>
+              <input type="radio" name="exportFormat" value="figma">
+              <span>Figma Tokens</span>
+            </label>
+          </fieldset>
+        </div>
+        
+        <div class="export-output">
+          <label for="exportTextarea">Generated Code:</label>
+          <textarea id="exportTextarea" readonly aria-label="Generated export code"></textarea>
+        </div>
+        
+        <div class="modal-actions">
+          <button id="copyExport" class="primary">📋 Copy to Clipboard</button>
+          <button id="downloadExport">💾 Download File</button>
+          <button id="shareExport">🔗 Share Link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Footer Component -->
+  <footer role="contentinfo">
+    <div class="footer-content">
+      <div class="social-links">
+        <a href="https://www.linkedin.com/in/usama-balhasal/" target="_blank" class="social-link" title="LinkedIn">
+          💼 LinkedIn
+        </a>
+        <a href="https://www.instagram.com/vlx_soma/" target="_blank" class="social-link" title="Instagram">
+          📷 Instagram
+        </a>
+        <a href="https://www.facebook.com/usama.balhalsal.05" target="_blank" class="social-link" title="Facebook">
+          👤 Facebook
+        </a>
+        <a href="https://github.com/Usama-Balhasal" target="_blank" class="social-link" title="GitHub">
+          🐙 GitHub
+        </a>
+      </div>
+      <div class="footer-info">
+        <p>&copy; 2025 IceThemeBuilder Pro. Built with ❤️ by Usama Balhasal.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
