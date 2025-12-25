@@ -12,6 +12,17 @@ Note:
 This project is currently in **beta** and under active development.  
 Some features may be incomplete, unstable, or not fully functional yet.
 
+## 🚀 Quick Start
+
+### **Option 1: Run Locally**
+1. Clone or download this repository  
+2. Open `index.html` in any modern web browser  
+3. Start generating professional color palettes instantly  
+
+### **Option 2: Live Demo**
+Access the live version here:  
+👉 https://icethemebuilder.netlify.app/
+
 ## 🌟 Key Features
 
 ### 🎨 **Advanced Color Generation**
@@ -82,17 +93,6 @@ HeaderManager      // Smart header auto-hide functionality
 - **Progressive Enhancement**: Graceful degradation for older browsers
 - **Mobile Responsive**: Optimized for touch interactions
 - **PWA Ready**: Can be installed as a progressive web app
-
-## 🚀 Quick Start
-
-### **Option 1: Run Locally**
-1. Clone or download this repository  
-2. Open `index.html` in any modern web browser  
-3. Start generating professional color palettes instantly  
-
-### **Option 2: Live Demo**
-Access the live version here:  
-👉 https://icethemebuilder.netlify.app/
 
 
 ## 📖 Usage Guide
