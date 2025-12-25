@@ -1,8 +1,3 @@
-Note
-
-This project is currently in **beta** and under active development.  
-Some features may be incomplete, unstable, or not fully functional yet.
-
 # ❄ IceThemeBuilder Pro
 
 > **Professional Color Theory Tool for Generating Harmonious Color Palettes**
@@ -12,6 +7,10 @@ Some features may be incomplete, unstable, or not fully functional yet.
 [![Accessibility](https://img.shields.io/badge/A11y-Friendly-2ecc71.svg)](https://www.a11y.com/)
 
 IceThemeBuilder Pro is a comprehensive, web-based color theory application designed for designers, developers, and brands who need professional-grade color palette generation and analysis tools. Built with accessibility and modern web standards in mind.
+
+Note:
+This project is currently in **beta** and under active development.  
+Some features may be incomplete, unstable, or not fully functional yet.
 
 ## 🌟 Key Features
 
