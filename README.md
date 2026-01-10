@@ -283,6 +283,15 @@ npm run build
 - **Clipboard Access**: For copy-to-clipboard functionality (optional)
 - **Local Storage**: For saving themes and preferences (optional)
 
+## Author
+
+**VLX Soma**
+
+- LinkedIn: [Usama Balhasal](https://www.linkedin.com/in/usama-balhasal/)
+- Instagram: [@vlx_soma](https://www.instagram.com/vlx_soma/)
+- Facebook: [Usama Balhalsal](https://www.facebook.com/usama.balhalsal.05)
+- GitHub: [@vlxb](https://github.com/Usama-Balhasal)
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -305,6 +314,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Colors not exporting**: Ensure JavaScript is enabled
 - **Images not uploading**: Check file size (<10MB) and format
 - **Accessibility issues**: Verify browser compatibility
+
+## Disclaimer
+
+- Initial layout generated with AI, functionality implemented manually
 
 ---
 
